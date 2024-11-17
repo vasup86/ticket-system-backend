@@ -1,13 +1,31 @@
 def createTicket(userID, message):
 
     try:
-        import mysql.connector
         import random
 
-        conn = mysql.connector.connect(host="localhost", user="root", passwd="admin")
+        import pymysql
+        from dotenv import load_dotenv
+        import os
 
-        cursor = conn.cursor(dictionary=True)
+        load_dotenv()
 
+
+        timeout = 10
+
+        conn = pymysql.connect(
+            connect_timeout=timeout,
+            cursorclass=pymysql.cursors.DictCursor,
+            db="ticketsystem",
+            host=f"{os.getenv('DATABASE_URL')}",
+            password=f"{os.getenv('DATABASE_PASSWORD')}",
+            read_timeout=timeout,
+            port=13361,
+            user=f"{os.getenv('DATABASE_USER')}",
+            write_timeout=timeout,
+        )
+        
+        cursor = conn.cursor()
+        
         # Get all the agents
         query = "SELECT * FROM ticketsystem.agents"
         cursor.execute(query)
@@ -41,22 +59,41 @@ def createTicket(userID, message):
         
         return "success"
 
-    except: 
+    except:
         return "error"
     
 
 
 def getUserAllTickets(userID):
+        
     try:
-        import mysql.connector
+        
+        import pymysql
+        from dotenv import load_dotenv
+        import os
 
-        conn = mysql.connector.connect(host="localhost", user="root", passwd="admin")
+        load_dotenv()
 
-        cursor = conn.cursor(dictionary=True)
+
+        timeout = 10
+
+        conn = pymysql.connect(
+            connect_timeout=timeout,
+            cursorclass=pymysql.cursors.DictCursor,
+            db="ticketsystem",
+            host=f"{os.getenv('DATABASE_URL')}",
+            password=f"{os.getenv('DATABASE_PASSWORD')}",
+            read_timeout=timeout,
+            port=13361,
+            user=f"{os.getenv('DATABASE_USER')}",
+            write_timeout=timeout,
+        )
+
+        cursor = conn.cursor()
 
         # Get users all the unique tickets ids
         query = """
-        SELECT t.ticket_id, CONVERT(t.created_at, CHAR) as created_at, t.message
+        SELECT t.ticket_id, CONVERT(t.created_at, CHAR) as created_at, t.message, t.user_id, t.agent_id
         FROM ticketsystem.tickets t
         INNER JOIN (
             SELECT ticket_id, MIN(created_at) AS created_at
