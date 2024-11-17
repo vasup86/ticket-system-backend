@@ -59,8 +59,6 @@ def getTicketMessages(ticketID):
 
         load_dotenv()
 
-
-        print(ticketID)
         timeout = 10
 
         conn = pymysql.connect(

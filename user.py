@@ -48,7 +48,6 @@ def createTicket(userID, message):
 
         query ="INSERT INTO ticketsystem.tickets (ticket_id, user_id, agent_id, creator,  message) VALUES (%s, %s, %s, %s, %s)"
 
-        print(query)
         values = (ticketNum, userID, agent['agent_id'], "user", message)
         cursor.execute(query, values)
         conn.commit()

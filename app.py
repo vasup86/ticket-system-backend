@@ -62,13 +62,9 @@ def getAgentAllTicketss():
 def getTicketMessage():
     ticketID = int(request.json['ticketID'])
 
-    print(ticketID)
-
     result = getTicketMessages(ticketID)
 
-    print(result)
-    
-    # throw error 406if error
+    # throw error 406 if error
     if result  == 'error':
         return jsonify({"errorType": 406, "result": "Error in getting tickets"}), 406
 
